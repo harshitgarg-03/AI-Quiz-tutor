@@ -2,7 +2,7 @@ import { Router } from "express";
 import * as org from "../controllers/org.controller.js";
 import * as quiz from "../controllers/quiz.controller.js";
 import * as attempt from "../controllers/attempt.controller.js";
-
+import passport from "passport";
 import {
     passwordValidator,
     ValidationMiddleware,
@@ -23,6 +23,23 @@ const router = Router();
 
 router.route("/register").post(ValidationMiddleware, register);
 router.route("/login").post(login);
+
+router.route("/auth/github").get(
+    
+  passport.authenticate("github", { scope: ["user:email"] })
+);
+
+// Step 2: Callback route
+router.route("/auth/github/callback").get(
+  passport.authenticate("github", {
+    failureRedirect: "/login",
+    session: true, // if using session
+  }),
+  (req, res) => {
+    // 👉 You can customize this
+    res.redirect("http://localhost:5173/dashboard");
+  }
+);
 router.route("/logout").delete(auth, login);
 router.route("/me").get(auth, getCurrentUser);
 router.route("/verify-email/:verificationToken").get(verifyEmail);
@@ -31,6 +48,8 @@ router.route("/refresh-token").get(refreshAccessToken);
 router.route("/forgot-password").get(forgotPassword);
 router.route("/reset-password/:resetToken").post(passwordValidator, resetForgotPassword);
 router.route("/changed-password").post(passwordValidator, auth, changeCurrentPassword);
+
+
 
 // Organization / billing
 router.route("/orgs").post( auth, org.createOrg); // create organization
