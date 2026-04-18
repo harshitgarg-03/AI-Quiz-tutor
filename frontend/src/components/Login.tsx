@@ -17,6 +17,10 @@ const Login: React.FC<LoginProps> = ({ setView }) => {
     const [form, setForm] = useState({ email: "", password: "" });
     const [showPassword, setShowPassword] = useState(false);
 
+    const handleLogin = () => {
+    // backend endpoint hit karega
+    window.location.href = "http://127.0.0.1:3000/api/v1/auth/github";
+  };
     const handleSubmit = async () => {
 
         if (!form.email || !form.password) {
@@ -121,7 +125,8 @@ const Login: React.FC<LoginProps> = ({ setView }) => {
                     </div>
 
                     {/* OAuth (Optional) */}
-                    <button
+                    {/* <button
+                         onClick={handleLogin}
                         type="button"
                         className="flex items-center justify-center gap-3 h-14 w-full rounded-lg border border-[#323267] bg-[#191933] font-medium text-white hover:bg-[#323267]/50 focus:ring-4 focus:ring-[#323267]/50"
                     >
@@ -138,7 +143,7 @@ const Login: React.FC<LoginProps> = ({ setView }) => {
                             />
                         </svg>
                         <span>Continue with GitHub</span>
-                    </button>
+                    </button> */}
 
                     {/* Switch to Sign Up */}
                     <p className="text-center text-sm text-[#9292c9]">
